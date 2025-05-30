@@ -34,6 +34,14 @@ async function scraperFravega() {
 
         const product = {};
 
+        //URL ficha producto
+        product.product_url = `https://www.fravega.com${href}`;
+
+        //URL img product
+        const producto_scr = await page.$('.imgSmall')
+        if(producto_scr){
+          product.product_img = await producto_scr.getAttribute('src')
+        }
         // Nombre
         product.product_name = await getText(page, '[data-test-id="product-title"]');
 
@@ -52,7 +60,8 @@ async function scraperFravega() {
         // Envío
         const shipping = await getText(page, '.sc-e700c6db-1.iFxWcW');
         if (shipping) {
-          const unwanted = "Entrega estimada 3 días habilesIngresá código postal (sólo números)Calcular";
+          const unwanted = "Ingresá código postal (sólo números)Calcular";
+          product.shipping_price = shipping.replace(/\n/g, ' | ');
           product.shipping_price = shipping.replace(unwanted, '');
         } else {
           product.shipping_price = null;

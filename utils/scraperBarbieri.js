@@ -11,7 +11,7 @@ async function scraperBarbieri() {
     for (const row of data) {
         const id = row.ID_FRABRICANTE;
 
-        const browser = await chromium.launch({ headless: false });
+        const browser = await chromium.launch({ headless: true });
         const context = await browser.newContext();
         const page = await context.newPage();
 
@@ -35,6 +35,16 @@ async function scraperBarbieri() {
                 //Ejemplo
                 //await page.waitForSelector('#codigo_postal', { state: 'visible' });
                 //await page.fill('#codigo_postal', codigoPostal.toString());
+
+                // url del producto
+                product.product_url = href;
+
+                // image del producto
+                const product_src = await page.$('.fotorama__img')
+
+                if (product_src){
+                    product.product_img = await product_src.getAttribute("src")
+                }
 
                 // nombre producto
                 product.product_name = await page.textContent('[data-ui-id="page-title-wrapper"]');
@@ -67,8 +77,9 @@ async function scraperBarbieri() {
                 await page.click('[class="calcular-envio"]');
 
                 await page.waitForTimeout(3000);
-                await page.waitForSelector('.ed-precio', { state: 'visible' });
-                product.shipping = await page.locator('[class="ed-precio"]').innerText();
+                await page.waitForSelector('.ed-cotizacion', { state: 'visible' });
+                const shippingText = await page.locator('[class="ed-cotizacion"]').innerText();
+                product.shipping_price = shippingText.replace(/\n/g, ' | ');
 
                 products.push(product);
             }
