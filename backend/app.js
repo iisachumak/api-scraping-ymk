@@ -3,9 +3,13 @@ const { scraperFravega } = require('./utils/scraperFravega');
 const { scraperBarbieri } = require('./utils/scraperBarbieri');
 const { scraperCastillo } = require('./utils/scraperCastillo');
 const { scraperOnCity } = require('./utils/scraperOnCity');
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors());
+
 
 app.get('/scraper-fravega', async (req, res) => {
   try {

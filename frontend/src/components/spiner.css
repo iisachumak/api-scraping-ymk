@@ -1,0 +1,43 @@
+.spiner-container{
+    font-size: 1.5rem;
+}
+
+.spiner-icon {
+    margin-right: 5px;
+    display: inline-block;
+    animation: subirBajar 3.3s ease-in-out infinite;
+}
+
+.spiner-text {
+    margin-right: 5px;
+    display: inline-block;
+    animation: cambioColor 3.3s ease-in-out infinite;
+}
+
+@keyframes subirBajar {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(300px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes cambioColor {
+    0% {
+        color: #000000;
+    }
+
+    50% {
+        color: #00000060;
+    }
+
+    100% {
+        color: #000000;
+    }
+}
