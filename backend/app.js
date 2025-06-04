@@ -1,48 +1,63 @@
+// app.js
 const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
+// Importa tus scrapers
 const { scraperFravega } = require('./utils/scraperFravega');
 const { scraperBarbieri } = require('./utils/scraperBarbieri');
 const { scraperCastillo } = require('./utils/scraperCastillo');
 const { scraperOnCity } = require('./utils/scraperOnCity');
-const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 
+// Multer: subir archivos a /uploads
+const upload = multer({ dest: 'uploads/' });
 
-app.get('/scraper-fravega', async (req, res) => {
+// Rutas POST para recibir archivo Excel
+app.post('/scraper-fravega', upload.single('file'), async (req, res) => {
   try {
-    const data = await scraperFravega();
+    const filePath = req.file.path;
+    const data = await scraperFravega(filePath);
+    fs.unlinkSync(filePath); // Borrar archivo temporal
     res.json({ status: 'scraping complete', data });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
 
-
-app.get('/scraper-barbieri', async (req, res) => {
+app.post('/scraper-barbieri', upload.single('file'), async (req, res) => {
   try {
-    const data = await scraperBarbieri();
+    const filePath = req.file.path;
+    const data = await scraperBarbieri(filePath);
+    fs.unlinkSync(filePath);
     res.json({ status: 'scraping complete', data });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
 
-
-app.get('/scraper-castillo', async (req, res) => {
+app.post('/scraper-castillo', upload.single('file'), async (req, res) => {
   try {
-    const data = await scraperCastillo();
+    const filePath = req.file.path;
+    const data = await scraperCastillo(filePath);
+    fs.unlinkSync(filePath);
     res.json({ status: 'scraping complete', data });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
 
-app.get('/scraper-oncity', async (req, res) => {
+app.post('/scraper-oncity', upload.single('file'), async (req, res) => {
   try {
-    const data = await scraperOnCity();
+    const filePath = req.file.path;
+    const data = await scraperOnCity(filePath);
+    fs.unlinkSync(filePath);
     res.json({ status: 'scraping complete', data });
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });

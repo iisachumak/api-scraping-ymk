@@ -1,8 +1,8 @@
 const { chromium } = require('playwright');
 const XLSX = require('xlsx');
 
-async function scraperFravega() {
-  const workbook = XLSX.readFile('busqueda.xlsx');
+async function scraperFravega(filePath) {
+  const workbook = XLSX.readFile(filePath);
   const sheetName = workbook.SheetNames[0];
   const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
